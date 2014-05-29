@@ -2,6 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, Float, String
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.sql import func
 import csv
 
 engine = create_engine('sqlite://', echo=False)
@@ -56,7 +57,7 @@ Base.metadata.create_all(engine)
 session = Session()
 
 # read csv file into database
-# unsure why primary key ID from csv file does not import correctly; used iterating ID instead
+# unsure8 why primary key ID from csv file does not import correctly; used iterating ID instead
 with open('temp.txt', 'rb') as csvfile:
 	fb_reader = csv.DictReader(csvfile, delimiter=',')
 	ID = 0
@@ -70,6 +71,8 @@ with open('temp.txt', 'rb') as csvfile:
 			row['TYPE']))
 		ID = ID + 1
 
-# test database by querying for rows with Line number 1
-for instance in session.query(Output).filter_by(LINE_NUMBER = 1):
-	print instance.LINE_NUMBER, instance.ZONE_NUMBER, instance.FARE_COLLECTED
+'''
+my_query = session.query(func.sum(Output.FARE_COLLECTED)).filter_by(LINE_NUMBER = 1)
+for result in my_query:
+	print result[0]
+'''
