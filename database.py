@@ -56,23 +56,17 @@ Base.metadata.create_all(engine)
 session = Session()
 with open('temp.txt', 'rb') as csvfile:
 	fb_reader = csv.DictReader(csvfile, delimiter=',')
+	ID = 0
 	for row in fb_reader:
-		session.add(row['\xef\xbb\xbfLINE_NUMBER'], row['ZONE_NUMBER'], row['TIME_RANGE'], \
-			row['DIRECTION'], row['SCHEDULED_RUN_TIME'], row['TOTAL_OPERATING_COST'], \
-			row['FARE_COLLECTED'], row['FAREBOX_RECOVERY'], row['DATE_STORED'], \
-			row['PCNAME'], row['SIGN_ON_DATE'], row['OPERATING_COST_PER_HOUR'], \
+		session.add(Output(ID, row['\xef\xbb\xbfLINE_NUMBER'], row['ZONE_NUMBER'], \
+			row['TIME_RANGE'], row['DIRECTION'], row['SCHEDULED_RUN_TIME'], \
+			row['TOTAL_OPERATING_COST'], row['FARE_COLLECTED'], \
+			row['FAREBOX_RECOVERY'], row['DATE_STORED'], row['PCNAME'], \
+			row['SIGN_ON_DATE'], row['OPERATING_COST_PER_HOUR'], \
 			row['RECOVERY_PROCESSING_ID'], row['AGGREGATE_ID'], row['COUNTY'], \
-			row['TYPE'])
+			row['TYPE']))
+		ID = ID + 1
 
-
-"""
-
-test1 = Output('name', 2, 2, 'timerange', 'direction', 10, 20, 30, 40, 'date', 'pc', 'ds', \
-	50, 55, 60, 'county', 'type')
-session.add(test1)
-"""
-"""
+# test database by querying for rows with Line number 1
 for instance in session.query(Output).filter_by(LINE_NUMBER = 1):
-	#print instance.ID, instance.ZONE_NUMBER, instance.TIME_RANGE, instance.DIRECTION
 	print instance.LINE_NUMBER, instance.ZONE_NUMBER, instance.FARE_COLLECTED
-"""
