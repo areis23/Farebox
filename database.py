@@ -54,6 +54,9 @@ class Output(Base):
 
 Base.metadata.create_all(engine)
 session = Session()
+
+# read csv file into database
+# unsure why primary key ID from csv file does not import correctly; used iterating ID instead
 with open('temp.txt', 'rb') as csvfile:
 	fb_reader = csv.DictReader(csvfile, delimiter=',')
 	ID = 0
